@@ -31,10 +31,9 @@ int		outfile_c(char *path);
 
 /*______________TOOLS______________*/
 
-char	**setup_path(char **p);
 char	**setup_cmd(char *str, char **p);
 void	free_mem(char **str);
-void	raise_error(char *error, char x);
+void	raise_error(char *error, char *mod);
 
 /*______________BONUS______________*/
 

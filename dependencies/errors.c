@@ -12,16 +12,25 @@
 
 #include "../includes/pipex.h"
 
-void	raise_error(char *error, char x)
+void	raise_error(char *error, char *mod)
 {
-	if (!error)
-		perror(NULL);
-	else
-		ft_putstr_fd(error, 2);
-	if (x == 'x')
+	if (!ft_strncmp(mod, "1", 1))
+	{
+		ft_putstr_fd("pipex: ", 2);
+		perror(error);
 		exit(1);
-	if (x == 'e')
+	}
+	else if (!ft_strncmp(mod, "127", 3))
+	{
+		ft_putstr_fd("pipex: ", 2);
+		perror(error);
 		exit(127);
+	}
+	else
+	{
+		ft_putstr_fd("pipex: ", 2);
+		perror(mod);
+	}
 }
 
 void	free_mem(char **str)
