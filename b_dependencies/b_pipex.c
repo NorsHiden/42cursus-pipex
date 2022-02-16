@@ -46,7 +46,7 @@ void	here_doc(char *str)
 		line = get_next_line(0);
 	}
 	free(catch);
-	write(fdp[1], context, ft_strlen(context));
+	ft_putstr_fd(context, fdp[1]);
 	dup2(fdp[0], 0);
 	close(fdp[0]);
 	close(fdp[1]);
@@ -73,7 +73,7 @@ int	main(int c, char **v, char **p)
 		dup2(fd, 0);
 		close(fd);
 	}
-	while (i < c - 2)
+	while (i < c - 1)
 		run_process(i++, c, v, p);
 	while (wait(NULL) != -1)
 		;

@@ -36,6 +36,7 @@ LIBFT = libft/libft.a
 all : $(NAME)
 
 $(NAME) : $(LIBFT) $(OBJS)
+	rm -f $(BONUS)
 	$(AR) $(NAME) $(OBJS)
 	$(CC) $(CFLAGS) $(NAME) $(LIBFT) -o pipex
 

@@ -20,7 +20,7 @@ void	out_process(char *here_doc, char *fullcmd, char *outfile, char **p)
 	if (!ft_strncmp("here_doc", here_doc, ft_strlen(here_doc)))
 		fd = open(outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
-		fd = open(outfile, O_CREAT | O_TRUNC, 0644);
+		fd = open(outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	dup2(fd, 1);
 	close(fd);
 	cmd = setup_cmd(fullcmd, p);
@@ -51,10 +51,7 @@ void	run_process(int i, int c, char **v, char **p)
 	if (pid == -1)
 		raise_error(NULL, "1");
 	if (i == c - 2 && pid == 0)
-	{
 		out_process(v[1], v[i], v[c - 1], p);
-		i++;
-	}
 	if (pid == 0)
 		child_process(fdp, v[i], p);
 	dup2(fdp[0], 0);
