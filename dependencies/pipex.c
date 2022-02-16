@@ -21,8 +21,18 @@ int	outfile_c(char *path)
 		if (unlink(path) == -1)
 			raise_error(NULL, "1");
 	}
-	fd = open(path, O_WRONLY | O_CREAT, 0777);
+	fd = open(path, O_WRONLY | O_CREAT, 0644);
 	return (fd);
+}
+
+static pid_t	ft_fork(void)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		raise_error(NULL, "1");
+	return (pid);
 }
 
 int	main(int c, char **v, char **p)
@@ -32,18 +42,20 @@ int	main(int c, char **v, char **p)
 	pid_t	pid;
 
 	if (c != 5)
-		raise_error("Please enter args as follows : "
-			"[infile] [cmd1] [cmd2] [outfile]\n", "1");
+		raise_error("Invalid arguments\n", "1");
 	pipe(fdp);
 	infile = open(v[1], O_RDONLY);
 	if (infile < 0)
 		raise_error(NULL, v[1]);
-	pid = fork();
-	if (pid == -1)
-		raise_error(NULL, "1");
+	pid = ft_fork();
 	if (pid == 0)
 		first_process(fdp, infile, v, p);
-	waitpid(pid, NULL, 0);
-	second_process(fdp, v, p);
+	pid = ft_fork();
+	if (pid == 0)
+		second_process(fdp, v, p);
+	close(fdp[0]);
+	close(fdp[1]);
+	while (wait(NULL) != -1)
+		;
 	return (0);
 }

@@ -20,7 +20,7 @@ static void	fill_buff(char **context, char *line)
 	*context = ft_strjoin(*context, line);
 	free(tmp);
 	if (!*context)
-		raise_error(NULL, 'x');
+		raise_error(NULL, "1");
 }
 
 void	here_doc(char *str)
@@ -31,7 +31,7 @@ void	here_doc(char *str)
 	char	*context;
 
 	if (pipe(fdp) == -1)
-		raise_error(NULL, 'x');
+		raise_error(NULL, "1");
 	write(1, "> ", 2);
 	line = get_next_line(0);
 	context = ft_strdup("");
@@ -58,7 +58,7 @@ int	main(int c, char **v, char **p)
 	int	i;
 
 	if (c < 5)
-		raise_error("Error\n", 'x');
+		raise_error("Error\n", "1");
 	i = 2;
 	if (!ft_strncmp("here_doc", v[1], ft_strlen(v[1])))
 	{
@@ -69,12 +69,13 @@ int	main(int c, char **v, char **p)
 	{
 		fd = open(v[1], O_RDONLY);
 		if (fd < 0)
-			raise_error(NULL, 'x');
+			raise_error(NULL, "1");
 		dup2(fd, 0);
 		close(fd);
 	}
 	while (i < c - 2)
-		run_process(v[i++], p);
-	out_process(v[1], v[i], v[c - 1], p);
+		run_process(i++, c, v, p);
+	while (wait(NULL) != -1)
+		;
 	return (0);
 }

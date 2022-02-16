@@ -18,18 +18,14 @@ void	out_process(char *here_doc, char *fullcmd, char *outfile, char **p)
 	int		fd;
 
 	if (!ft_strncmp("here_doc", here_doc, ft_strlen(here_doc)))
-		fd = open(outfile, O_CREAT | O_WRONLY | O_APPEND, 0777);
+		fd = open(outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
-	{
-		if (!access(outfile, W_OK))
-			unlink(outfile);
-		fd = open(outfile, O_CREAT | O_WRONLY, 0777);
-	}
+		fd = open(outfile, O_CREAT | O_TRUNC, 0644);
 	dup2(fd, 1);
 	close(fd);
 	cmd = setup_cmd(fullcmd, p);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", 'e');
+		raise_error("command not found\n", "127");
 }
 
 void	child_process(int	*fdp, char *fullcmd, char **p)
@@ -41,23 +37,27 @@ void	child_process(int	*fdp, char *fullcmd, char **p)
 	close(fdp[1]);
 	close(fdp[0]);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", 'e');
+		raise_error("command not found\n", "127");
 }
 
-void	run_process(char *cmd, char **p)
+void	run_process(int i, int c, char **v, char **p)
 {
 	int		fdp[2];
 	pid_t	pid;
 
 	if (pipe(fdp) == -1)
-		raise_error(NULL, 'x');
+		raise_error(NULL, "1");
 	pid = fork();
 	if (pid == -1)
-		raise_error(NULL, 'x');
+		raise_error(NULL, "1");
+	if (i == c - 2 && pid == 0)
+	{
+		out_process(v[1], v[i], v[c - 1], p);
+		i++;
+	}
 	if (pid == 0)
-		child_process(fdp, cmd, p);
+		child_process(fdp, v[i], p);
 	dup2(fdp[0], 0);
 	close(fdp[0]);
 	close(fdp[1]);
-	waitpid(pid, NULL, 0);
 }

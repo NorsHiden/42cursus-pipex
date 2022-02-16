@@ -12,7 +12,7 @@
 
 #include "../includes/pipex.h"
 
-void	raise_error(char *error, char *mod)
+int	raise_error(char *error, char *mod)
 {
 	if (!ft_strncmp(mod, "1", 1))
 	{
@@ -30,6 +30,7 @@ void	raise_error(char *error, char *mod)
 	{
 		ft_putstr_fd("pipex: ", 2);
 		perror(mod);
+		return (1);
 	}
 }
 

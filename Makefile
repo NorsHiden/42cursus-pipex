@@ -45,6 +45,7 @@ $(LIBFT) :
 bonus : $(BONUS)
 
 $(BONUS) : $(LIBFT) $(B_OBJS)
+	rm -f $(NAME)
 	$(AR) $(BONUS) $(B_OBJS)
 	$(CC) $(CFLAGS) $(BONUS) $(LIBFT) -o pipex
 

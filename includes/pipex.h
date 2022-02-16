@@ -33,12 +33,12 @@ int		outfile_c(char *path);
 
 char	**setup_cmd(char *str, char **p);
 void	free_mem(char **str);
-void	raise_error(char *error, char *mod);
+int		raise_error(char *error, char *mod);
 
 /*______________BONUS______________*/
 
 char	*get_next_line(int fd);
-void	run_process(char *cmd, char **p);
+void	run_process(int i, int c, char **v, char **p);
 void	child_process(int	*fdp, char *fullcmd, char **p);
 void	out_process(char *here_doc, char *fullcmd, char *outfile, char **p);
 
