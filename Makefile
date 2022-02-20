@@ -17,21 +17,23 @@ CFLAGS = -Wall -Wextra -Werror
 AR = ar rc
 
 SRCS =	dependencies/errors.c dependencies/pipex.c \
-		dependencies/processes.c dependencies/setup.c
+		dependencies/processes.c dependencies/setup.c \
+		dependencies/utils.c dependencies/ft_memcpy.c \
+		dependencies/ft_split.c dependencies/ft_substr.c
 
 OBJS = $(SRCS:.c=.o)
 
 B_SRCS = dependencies/setup.c dependencies/errors.c \
 		b_dependencies/b_pipex.c b_dependencies/b_processes.c \
-		b_dependencies/get_next_line.c
+		b_dependencies/get_next_line.c dependencies/utils.c \
+		dependencies/ft_memcpy.c dependencies/ft_split.c \
+		dependencies/ft_substr.c
 
 B_OBJS = $(B_SRCS:.c=.o)
 
 NAME = dependencies/mandatory.a
 
 BONUS = b_dependencies/bonus.a
-
-LIBFT = libft/libft.a
 
 all : $(NAME)
 
@@ -40,23 +42,18 @@ $(NAME) : $(LIBFT) $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 	$(CC) $(CFLAGS) $(NAME) $(LIBFT) -o pipex
 
-$(LIBFT) :
-	make -C libft/
-
 bonus : $(BONUS)
 
-$(BONUS) : $(LIBFT) $(B_OBJS)
+$(BONUS) : $(B_OBJS)
 	rm -f $(NAME)
 	$(AR) $(BONUS) $(B_OBJS)
-	$(CC) $(CFLAGS) $(BONUS) $(LIBFT) -o pipex
+	$(CC) $(CFLAGS) $(BONUS) -o pipex
 
 clean :
-	make clean -C libft/
-
-fclean :
-	make fclean -C libft/
-	rm -f $(OBJS) $(B_OBJS)
 	rm -f $(NAME) $(BONUS)
+
+fclean : clean
+	rm -f $(OBJS) $(B_OBJS)
 
 re : fclean all
 

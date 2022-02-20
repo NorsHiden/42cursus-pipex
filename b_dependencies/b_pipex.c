@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_pipex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nelidris <nelidris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 01:27:41 by marvin            #+#    #+#             */
-/*   Updated: 2022/01/21 01:27:41 by marvin           ###   ########.fr       */
+/*   Created: 2022/02/20 07:25:10 by nelidris          #+#    #+#             */
+/*   Updated: 2022/02/20 07:25:10 by nelidris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	here_doc(char *str)
 		raise_error(NULL, "1");
 	write(1, "> ", 2);
 	line = get_next_line(0);
-	context = ft_strdup("");
+	context = ft_strjoin("", "");
 	catch = ft_strjoin(str, "\n");
 	while (line)
 	{
@@ -46,7 +46,7 @@ void	here_doc(char *str)
 		line = get_next_line(0);
 	}
 	free(catch);
-	ft_putstr_fd(context, fdp[1]);
+	write(fdp[1], context, ft_strlen(context));
 	dup2(fdp[0], 0);
 	close(fdp[0]);
 	close(fdp[1]);

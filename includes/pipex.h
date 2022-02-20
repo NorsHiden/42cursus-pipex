@@ -19,7 +19,6 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <stdlib.h>
-# include "../libft/libft.h"
 
 # define BUFFER_SIZE 1024
 
@@ -33,6 +32,13 @@ int		outfile_c(char *path);
 
 char	**setup_cmd(char *str, char **p);
 void	free_mem(char **str);
+size_t	ft_strlen(const char *s);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	**ft_split(char const *s, char c);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		raise_error(char *error, char *mod);
 
 /*______________BONUS______________*/
