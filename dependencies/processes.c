@@ -25,7 +25,7 @@ void	first_process(int	*fdp, int infile, char **v, char **p)
 	close(fdp[1]);
 	close(fdp[0]);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", "127");
+		raise_error("command not found", "127");
 }
 
 void	second_process(int *fdp, char **v, char **p)
@@ -41,5 +41,5 @@ void	second_process(int *fdp, char **v, char **p)
 	close(fdp[0]);
 	close(fdp[1]);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", "127");
+		raise_error("command not found", "127");
 }

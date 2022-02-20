@@ -16,12 +16,7 @@ int	outfile_c(char *path)
 {
 	int	fd;
 
-	if (access(path, F_OK) == 0)
-	{
-		if (unlink(path) == -1)
-			raise_error(NULL, "1");
-	}
-	fd = open(path, O_WRONLY | O_CREAT, 0644);
+	fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	return (fd);
 }
 

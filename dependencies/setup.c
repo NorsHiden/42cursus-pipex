@@ -64,7 +64,6 @@ static void	find_path(char **cmd, char **paths)
 		free(tmp);
 		i++;
 	}
-	raise_error("command not found.\n", "127");
 }
 
 char	**setup_cmd(char *str, char **p)
