@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nelidris <nelidris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/15 17:17:20 by marvin            #+#    #+#             */
-/*   Updated: 2022/01/15 17:17:20 by marvin           ###   ########.fr       */
+/*   Created: 2022/02/20 07:24:24 by nelidris          #+#    #+#             */
+/*   Updated: 2022/02/20 07:24:24 by nelidris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ int	raise_error(char *error, char *mod)
 {
 	if (!ft_strncmp(mod, "1", 1))
 	{
-		ft_putstr_fd("pipex: ", 2);
+		write(2, "pipex: ", 8);
 		perror(error);
 		exit(1);
 	}
 	else if (!ft_strncmp(mod, "127", 3))
 	{
-		ft_putstr_fd("pipex: ", 2);
+		write(2, "pipex: ", 8);
 		perror(error);
 		exit(127);
 	}
 	else
 	{
-		ft_putstr_fd("pipex: ", 2);
+		write(2, "pipex: ", 8);
 		perror(mod);
 		return (1);
 	}

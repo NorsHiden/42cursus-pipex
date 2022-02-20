@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nelidris <nelidris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/17 13:38:24 by marvin            #+#    #+#             */
-/*   Updated: 2022/01/17 13:38:24 by marvin           ###   ########.fr       */
+/*   Created: 2022/02/20 07:24:38 by nelidris          #+#    #+#             */
+/*   Updated: 2022/02/20 07:24:38 by nelidris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+
+static void	add_slash(char **paths)
+{
+	size_t	i;
+	char	*tmp;
+
+	i = 0;
+	while (paths[i])
+	{
+		tmp = paths[i];
+		paths[i] = ft_strjoin(paths[i], "/");
+		if (!paths[i])
+			raise_error(NULL, "1");
+		free(tmp);
+		i++;
+	}
+}
 
 static char	**setup_path(char **p)
 {
@@ -25,45 +42,42 @@ static char	**setup_path(char **p)
 	paths = ft_split(&p[i][5], ':');
 	if (!paths)
 		raise_error(NULL, "1");
+	add_slash(paths);
 	return (paths);
 }
 
-static char	*bash_path(char *bash, char **p)
+static void	find_path(char **cmd, char **paths)
 {
-	char	**paths;
-	char	*tmp;
 	size_t	i;
+	char	*tmp;
 
-	paths = setup_path(p);
 	i = 0;
 	while (paths[i])
 	{
-		tmp = ft_strjoin(paths[i], bash);
-		if (!tmp)
-			raise_error(NULL, "1");
+		tmp = ft_strjoin(paths[i], cmd[0]);
 		if (!access(tmp, X_OK))
-			break ;
+		{
+			free(cmd[0]);
+			cmd[0] = tmp;
+			return ;
+		}
 		free(tmp);
-		tmp = 0;
 		i++;
 	}
-	free_mem(paths);
-	bash = tmp;
-	return (bash);
+	raise_error("command not found.\n", "127");
 }
 
 char	**setup_cmd(char *str, char **p)
 {
 	char	**cmd;
+	char	**paths;
 
 	if (!*str)
 		raise_error("No such file or directory\n", "1");
-	cmd = (char **)malloc(sizeof(char *) * 4);
+	cmd = ft_split(str, ' ');
 	if (!cmd)
 		raise_error(NULL, "1");
-	cmd[0] = bash_path("/bash", p);
-	cmd[1] = "-c";
-	cmd[2] = str;
-	cmd[3] = 0;
+	paths = setup_path(p);
+	find_path(cmd, paths);
 	return (cmd);
 }
