@@ -26,7 +26,7 @@ static pid_t	ft_fork(void)
 
 	pid = fork();
 	if (pid == -1)
-		raise_error(NULL, "1");
+		raise_error("can't fork\n", "", 1);
 	return (pid);
 }
 
@@ -34,14 +34,16 @@ int	main(int c, char **v, char **p)
 {
 	int		fdp[2];
 	int		infile;
+	int		exit_status;
 	pid_t	pid;
 
 	if (c != 5)
-		raise_error("Invalid arguments\n", "1");
+		raise_error("Invalid arguments\n", "", 1);
 	pipe(fdp);
+	exit_status = 0;
 	infile = open(v[1], O_RDONLY);
 	if (infile < 0)
-		raise_error(NULL, v[1]);
+		raise_error("No such file or directory\n", v[1], 1);
 	pid = ft_fork();
 	if (pid == 0)
 		first_process(fdp, infile, v, p);
@@ -50,7 +52,7 @@ int	main(int c, char **v, char **p)
 		second_process(fdp, v, p);
 	close(fdp[0]);
 	close(fdp[1]);
-	while (wait(NULL) != -1)
+	while (wait(&exit_status) != -1)
 		;
 	return (0);
 }

@@ -23,7 +23,7 @@ static void	add_slash(char **paths)
 		tmp = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
 		if (!paths[i])
-			raise_error(NULL, "1");
+			raise_error("not enough memory", "", 1);
 		free(tmp);
 		i++;
 	}
@@ -38,10 +38,10 @@ static char	**setup_path(char **p)
 	while (ft_strncmp("PATH", p[i], 4) && p[i])
 		i++;
 	if (ft_strncmp("PATH", p[i], 4))
-		raise_error(NULL, "1");
+		raise_error("PATH not found\n", "", 1);
 	paths = ft_split(&p[i][5], ':');
 	if (!paths)
-		raise_error(NULL, "1");
+		raise_error("not enough memory\n", "", 1);
 	add_slash(paths);
 	return (paths);
 }
@@ -70,12 +70,20 @@ char	**setup_cmd(char *str, char **p)
 {
 	char	**cmd;
 	char	**paths;
+	int		i;
 
 	if (!*str)
-		raise_error("No such file or directory\n", "1");
+		raise_error("command not found\n", str, 127);
 	cmd = ft_split(str, ' ');
 	if (!cmd)
-		raise_error(NULL, "1");
+		raise_error("not enough memory\n", "", 1);
+	i = 0;
+	while (cmd[0][i])
+	{
+		if (cmd[0][i] == '/')
+			return (cmd);
+		i++;
+	}
 	paths = setup_path(p);
 	find_path(cmd, paths);
 	return (cmd);

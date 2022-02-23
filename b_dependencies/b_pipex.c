@@ -20,7 +20,7 @@ static void	fill_buff(char **context, char *line)
 	*context = ft_strjoin(*context, line);
 	free(tmp);
 	if (!*context)
-		raise_error(NULL, "1");
+		raise_error("not enough memory\n", "", 1);
 }
 
 void	here_doc(char *str)
@@ -31,7 +31,7 @@ void	here_doc(char *str)
 	char	*context;
 
 	if (pipe(fdp) == -1)
-		raise_error(NULL, "1");
+		raise_error("can't create fd\n", "", 1);
 	write(1, "> ", 2);
 	line = get_next_line(0);
 	context = ft_strjoin("", "");
@@ -58,7 +58,7 @@ int	main(int c, char **v, char **p)
 	int	i;
 
 	if (c < 5)
-		raise_error("Error\n", "1");
+		raise_error("Invalid arguments\n", "", 1);
 	i = 2;
 	if (!ft_strncmp("here_doc", v[1], ft_strlen(v[1])))
 	{
@@ -69,7 +69,7 @@ int	main(int c, char **v, char **p)
 	{
 		fd = open(v[1], O_RDONLY);
 		if (fd < 0)
-			raise_error(NULL, "1");
+			raise_error("No such file or directory\n", v[1], 1);
 		dup2(fd, 0);
 		close(fd);
 	}

@@ -25,7 +25,7 @@ void	out_process(char *here_doc, char *fullcmd, char *outfile, char **p)
 	close(fd);
 	cmd = setup_cmd(fullcmd, p);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", "127");
+		raise_error("command not found\n", cmd[0], 127);
 }
 
 void	child_process(int	*fdp, char *fullcmd, char **p)
@@ -37,7 +37,7 @@ void	child_process(int	*fdp, char *fullcmd, char **p)
 	close(fdp[1]);
 	close(fdp[0]);
 	if (execve(cmd[0], cmd, p) == -1)
-		raise_error("command not found\n", "127");
+		raise_error("command not found\n", cmd[0], 127);
 }
 
 void	run_process(int i, int c, char **v, char **p)
@@ -46,10 +46,10 @@ void	run_process(int i, int c, char **v, char **p)
 	pid_t	pid;
 
 	if (pipe(fdp) == -1)
-		raise_error(NULL, "1");
+		raise_error("can't create fd\n", "", 1);
 	pid = fork();
 	if (pid == -1)
-		raise_error(NULL, "1");
+		raise_error("cant't fork\n", "", 1);
 	if (i == c - 2 && pid == 0)
 		out_process(v[1], v[i], v[c - 1], p);
 	if (pid == 0)

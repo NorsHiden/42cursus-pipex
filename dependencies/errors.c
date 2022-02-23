@@ -12,26 +12,18 @@
 
 #include "../includes/pipex.h"
 
-int	raise_error(char *error, char *mod)
+int	raise_error(char *error, char *name, unsigned char exit_code)
 {
-	if (!ft_strncmp(mod, "1", 1))
+	write(2, "pipex: ", 8);
+	if (*name)
 	{
-		write(2, "pipex: ", 8);
-		perror(error);
-		exit(1);
+		write(2, name, ft_strlen(name));
+		write(2, ": ", 2);
 	}
-	else if (!ft_strncmp(mod, "127", 3))
-	{
-		write(2, "pipex: ", 8);
-		perror(error);
-		exit(127);
-	}
-	else
-	{
-		write(2, "pipex: ", 8);
-		perror(mod);
-		return (1);
-	}
+	write(2, error, ft_strlen(error));
+	if (ft_strncmp("No such file or directory\n", error, 27))
+		exit(exit_code);
+	return (1);
 }
 
 void	free_mem(char **str)
